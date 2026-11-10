@@ -754,8 +754,7 @@ const MENU=[
    ['Extensão de cílios',[['Boneca Natural',250],['Boneca Premium',250],['Boneca Glow',250],['Boneca Fox',275],['Boneca Efeito Molhado',250],['Boneca Egípcia',250]]],
    ['Manutenção e lash lift',[['Manutenção até 21 dias',150],['Lash Lift (dura até 1 mês)',190]]],
    ['Head Spa',[['Head Spa Pausa · 40 a 60 min',247],['Head Spa Relax · 1h45',359],['Head Spa Completo · 2h',447]]],
-   ['Curso Lash Pro · janeiro de 2027',[['Sem kit',1497],['Com kit de materiais',2000],['VIP',2500],['Sinal (vaga garantida + contrato)',300]]]],
-  note:'Todas as técnicas de cílios também na cor marrom, com tecnologia LED UV. Depois de 21 dias, é nova aplicação.'},
+   ['Curso Lash Pro · janeiro de 2027',[['Sem kit',1497],['Com kit de materiais',2000],['VIP',2500],['Sinal (vaga garantida + contrato)',300]]]],note:'Todas as técnicas de cílios também na cor marrom, com tecnologia LED UV. Depois de 21 dias, é nova aplicação. No curso, se a aluna desistir depois do sinal, perde o valor do sinal.'},
  {who:'Amália',t:'Head Spa e massagens',sub:'40% para a Amália',ph:['massagem','headspa'],groups:[
    ['Massagens · 1 hora',[['Massagem relaxante',160],['Massagem modeladora',160],['Drenagem linfática',160]]],
    ['Pacotes',[['5 sessões de 1h30 + 5 Head Spa',697],['10 sessões + 5 Head Spa',1200]]]],note:''},
@@ -816,7 +815,7 @@ function renderOffers(){
   const groups=[['headspa','Head Spa','Da Boneca, com 40% para a Amália'],['massagem','Massagem','Com a Amália'],['bronze','Bronze','Com a Bruna'],['laser','Depilação a laser','Com a Rosa']];
   $('#packs').innerHTML=groups.map(([g,t,sub])=>`<div class="pgroup"><div class="pghead"><h3>${t}</h3><span class="muted small">${sub}</span></div><div class="pgrid">${MODEL.filter(o=>o.pack===g).map(o=>{const c=calc(o);return `<article class="pk"><div class="pkimg zoom" data-zoom="${o.ph}" style="background-image:url(${PH[o.ph]})"><span class="off">-${+o.disc||0}%</span></div><div class="pkb"><h4>${esc(o.name)}</h4><p class="small muted">${esc(o.desc)}</p><div class="price"><s>${money(c.normal)}</s><b>${money(c.black)}</b></div><p class="small"><b style="color:var(--ok)">Economia de ${money(c.save)}</b>${o.sessions>1?` · ${money(c.black/o.sessions)} por sessão`:''}</p></div></article>`}).join('')}</div></div>`).join('');
 }
-$('#rules').innerHTML=[['10% em combos e pacotes','Micro labial com 50%. Serviço avulso fica no preço normal. Na Emily, só para clientes novas.'],['Sinal reserva o horário','R$ 50 nos procedimentos. No curso Lash Pro, R$ 300 garantem a vaga e enviamos o contrato.'],['Saldo antes de começar','Ninguém inicia o procedimento sem o saldo pago. Cancelamento com menos de 24h perde o sinal.'],['Ofertas não acumulam','Agendamento manual em novembro e dezembro.']].map(r=>`<div><b>${esc(r[0])}</b>${esc(r[1])}</div>`).join('');
+$('#rules').innerHTML=[['10% em combos e pacotes','Micro labial com 50%. Serviço avulso fica no preço normal. Na Emily, só para clientes novas.'],['Sinal reserva o horário','R$ 50 nos procedimentos. No curso Lash Pro, R$ 300 garantem a vaga e enviamos o contrato. Se a aluna desistir, perde o sinal.'],['Saldo antes de começar','Ninguém inicia o procedimento sem o saldo pago. Cancelamento com menos de 24h perde o sinal.'],['Ofertas não acumulam','Agendamento manual em novembro e dezembro.']].map(r=>`<div><b>${esc(r[0])}</b>${esc(r[1])}</div>`).join('');
 let CI=0;
 $('#cOffer').innerHTML=`<optgroup label="Combos">${MODEL.map((o,i)=>o.pack?'':`<option value="${i}">${esc(o.name)}</option>`).join('')}</optgroup><optgroup label="Pacotes">${MODEL.map((o,i)=>o.pack?`<option value="${i}">${esc(o.name)}</option>`:'').join('')}</optgroup>`;
 function renderCalcInputs(){
@@ -900,7 +899,7 @@ renderOffers();renderCalcInputs();renderReceipt();renderRevenue();renderGoal();
  <p>Curso intensivo presencial de extensão de cílios, com certificado. Turma de janeiro de 2027, com 3 vagas.</p>
  <div class="lpfacts"><span>14 horas presenciais</span><span>Certificado Lash Pro</span><span>3 vagas</span><span>Mentora: Rebeca</span></div>
  <div class="mods">${mods.map(m=>`<div><small>${m[0]}</small><s>${money(m[1])}</s><b>${money(m[1]*(1-d/100))}</b></div>`).join('')}</div>
- <div class="seat">Sinal de <b>R$ 300</b>: a vaga fica garantida e já enviamos o contrato. O saldo é pago no primeiro dia, antes da aula.</div>
+ <div class="seat">Sinal de <b>R$ 300</b>: a vaga fica garantida e já enviamos o contrato. O saldo é pago no primeiro dia, antes da aula. Se a aluna desistir, perde o valor do sinal, como diz o contrato.</div>
  <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" data-copy="${esc((D.messages.find(m=>/Pré-reserva Lash Pro/.test(m.title))||{}).text||'')}">Copiar mensagem de pré-reserva</button><a class="btn" style="background:transparent;color:var(--hero-ink);border-color:rgba(255,255,255,.3)" href="#mensagens">Ver todas as mensagens</a></div>`;
  $('#alunas').innerHTML=['turma1','aluna1','turma2','aluna4','turma3','aluna3','equipe','aluna2','brinde'].map(k=>`<img class="zoom" data-zoom="${k}" src="${PH[k]}" alt="Alunas formadas no Lash Pro" loading="lazy">`).join('');
 })();
