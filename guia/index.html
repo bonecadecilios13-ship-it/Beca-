@@ -118,9 +118,14 @@ section{padding-block:72px 8px;scroll-margin-top:70px}
 .stage{background:var(--surface);border:1px solid var(--line);border-radius:22px;display:grid;grid-template-columns:330px 1fr;overflow:hidden;box-shadow:var(--shadow)}
 .stage.now{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft),var(--shadow)}
 .stage.past{opacity:.92}
-.stage .art{position:relative;min-height:220px;display:grid;place-items:center;padding:16px}
-.stage .art svg{width:100%;max-width:300px;height:auto}
-.stage .art .n{position:absolute;left:18px;top:14px;font-family:var(--display);font-size:3.2rem;line-height:1;font-weight:700}
+.stage .art{position:relative;min-height:300px;background-size:cover;background-position:center;overflow:hidden}
+.stage .art::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(30,10,24,.05) 30%,rgba(30,10,24,.78) 100%)}
+.stage .art::after{content:"";position:absolute;inset:12px;border:1px solid rgba(255,255,255,.55);border-radius:14px;pointer-events:none}
+.stage .art .n{position:absolute;left:26px;top:20px;font-family:var(--display);font-size:3.6rem;line-height:1;font-weight:600;color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.35);z-index:1}
+.stage .art .cap{position:absolute;left:26px;right:26px;bottom:24px;z-index:1;color:#fff}
+.stage .art .cap small{display:block;font-size:.68rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;opacity:.85}
+.stage .art .cap em{display:block;font-family:var(--script);font-style:normal;font-size:2.3rem;line-height:1.05;text-shadow:0 2px 12px rgba(0,0,0,.4)}
+.stage .art .flag{z-index:1}
 .stage .art .flag{position:absolute;right:14px;top:14px}
 .stage .content{padding:24px 26px;display:flex;flex-direction:column;gap:12px;min-width:0}
 .stage .when{font-size:.8rem;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
@@ -692,11 +697,12 @@ const JOURNEY=[
 ];
 const stageState=j=>{const a=D.phases[j.ph[0]][0],b=D.phases[j.ph[j.ph.length-1]][1];return{a,b,cls:TODAY>b?'past':TODAY>=a?'now':''}};
 const msgByTitle=t=>D.messages.find(m=>m.title===t);
+const STAGE_PH={prep:['salaoBruna','tudo no lugar','center'],rec:['poster','luz, câmera, Boneca','center 30%'],ann:['brow','vem aí','center 25%'],vip:['brinde','só para as VIPs','center 30%'],open:['turma1','é Black na Boneca','center 30%'],care:['massagem','cuidado em cada detalhe','center'],res:['equipe','juntas, chegamos lá','center 30%']};
 function renderJourney(){
   $('#journey').innerHTML=JOURNEY.map((j,i)=>{const s=stageState(j);
     const msgs=j.msgs.map(msgByTitle).filter(Boolean);
     return `<article class="stage ${s.cls}" id="etapa-${i+1}">
-    <div class="art" style="background:${TILE[j.k]}"><span class="n" style="color:${['rec','vip','open'].includes(j.k)?'rgba(255,255,255,.92)':'#3b1f35'}">${i+1}</span>${s.cls==='now'?'<span class="flag pill brand">Estamos aqui</span>':s.cls==='past'?'<span class="flag pill">Já passou</span>':''}${ART[j.k]}</div>
+    <div class="art zoom" data-zoom="${STAGE_PH[j.k][0]}" role="img" aria-label="${esc(j.t)}" style="background-image:url(${PH[STAGE_PH[j.k][0]]});background-position:${STAGE_PH[j.k][2]}"><span class="n">${pad(i+1)}</span>${s.cls==='now'?'<span class="flag pill brand">Estamos aqui</span>':s.cls==='past'?'<span class="flag pill">Já passou</span>':''}<div class="cap"><small>Etapa ${i+1} · Black Boneca</small><em>${STAGE_PH[j.k][1]}</em></div></div>
     <div class="content"><div class="when">${dm(s.a)} a ${dm(s.b)}</div><h3>${esc(j.t)}</h3><p class="intro">${esc(j.intro)}</p>
     <ol class="howto">${j.how.map(h=>`<li><span>${esc(h)}</span></li>`).join('')}</ol>
     ${j.k==='open'?`<div><div class="lbl" style="margin-bottom:6px">Exemplos de prova social da casa</div><div class="proofs">${['lash1','turma1','brow','nails2'].map(k=>`<img class="zoom" data-zoom="${k}" src="${PH[k]}" alt="Trabalho real da Boneca" loading="lazy">`).join('')}</div></div>`:''}
